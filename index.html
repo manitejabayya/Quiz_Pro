@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+
+        <!-- Start Screen -->
+        <div class="screen active" id="startScreen">
+            <div class="header">
+                <h1>🧠 Quiz Master Pro</h1>
+                <p>Test your knowledge with our exciting quiz!</p>
+            </div>
+            
+            <div class="user-stats" id="userStats">
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Level</div>
+                        <div class="stat-value" id="playerLevel">1</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-info">
+                        <div class="stat-label">XP</div>
+                        <div class="stat-value" id="playerXP">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Streak</div>
+                        <div class="stat-value" id="playerStreak">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="start-form">
+                <input type="text" class="name-input" id="playerName" placeholder="Enter your name" maxlength="20">
+                
+                <div class="category-selector">
+                    <label>Choose Category:</label>
+                    <select id="categorySelect">
+                        <option value="general">General Knowledge</option>
+                        <option value="science">Science</option>
+                        <option value="sports">Sports</option>
+                        <option value="technology">Technology</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+
+                <div class="difficulty-selector">
+                    <label>Choose Difficulty:</label>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                    </div>
+                </div>
+
+                <div class="game-modes">
+                    <label>Choose Game Mode:</label>
+                    <div class="mode-buttons">
+                        <button class="mode-btn active" data-mode="classic">Classic</button>
+                        <button class="mode-btn" data-mode="blitz">Blitz</button>
+                        <button class="mode-btn" data-mode="survival">Survival</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startQuiz()">Start Quiz</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">Leaderboard</button>
+                    <button class="btn btn-secondary" onclick="showProfile()">Profile</button>
+                    <button class="btn btn-secondary" onclick="showDailyQuiz()">Daily Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="screen" id="quizScreen">
+            <div class="quiz-header">
+                <div class="quiz-info">
+                    <div class="question-counter">
+                        Question <span id="currentQuestion">1</span> of <span id="totalQuestions">15</span>
+                    </div>
+                    <div class="timer" id="timer">30</div>
+                    <div class="score-display">
+                        Score: <span id="currentScore">0</span>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText">Loading question...</div>
+                <div class="options" id="options"></div>
+                <button class="btn next-btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" onclick="pauseQuiz()" id="pauseBtn">Pause</button>
+                <button class="btn btn-secondary" onclick="quitQuiz()">Quit</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-card">
+                <div class="celebration" id="celebration">🎉</div>
+                <h2>Quiz Complete!</h2>
+                
+                <div class="score-summary">
+                    <div class="final-score" id="finalScore">0/15</div>
+                    <div class="stars" id="starRating"></div>
+                    <div class="performance-stats">
+                        <div class="stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value" id="accuracy">0%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Time:</span>
+                            <span class="stat-value" id="totalTime">0:00</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">XP Earned:</span>
+                            <span class="stat-value" id="xpEarned">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements" id="achievements"></div>
+
+                <div class="share-section">
+                    <p>Share your results:</p>
+                    <div class="share-buttons">
+                        <button class="btn btn-social" onclick="shareTwitter()">Share on Twitter</button>
+                        <button class="btn btn-social" onclick="shareChallenge()">Challenge Friends</button>
+                    </div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="restartQuiz()">Play Again</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+                    <button class="btn btn-secondary" onclick="showStartScreen()">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div class="screen" id="leaderboardScreen">
+            <div class="leaderboard">
+                <h3>🏆 Leaderboard</h3>
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" onclick="showLeaderboardTab('global')">Global</button>
+                    <button class="tab-btn" onclick="showLeaderboardTab('friends')">Friends</button>
+                    <button class="tab-btn" onclick="showLeaderboardTab('category')">Category</button>
+                </div>
+                <div id="leaderboardList"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="showStartScreen()">Back to Menu</button>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen" id="profileScreen">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <h3 id="profileName">Player</h3>
+                <div class="profile-level">Level <span id="profileLevel">1</span></div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalQuizzes">0</div>
+                        <div class="stat-label">Quizzes Taken</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalAccuracy">0%</div>
+                        <div class="stat-label">Overall Accuracy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="bestStreak">0</div>
+                        <div class="stat-label">Best Streak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="favoriteCategory">General</div>
+                        <div class="stat-label">Favorite Category</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="badges-section">
+                <h4>Achievements</h4>
+                <div class="badges-grid" id="badgesGrid"></div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="showStartScreen()">Back to Menu</button>
+        </div>
+
+        <!-- Daily Quiz Screen -->
+        <div class="screen" id="dailyQuizScreen">
+            <div class="daily-header">
+                <h3>📅 Daily Quiz</h3>
+                <p>Complete today's special quiz for bonus rewards!</p>
+                <div class="daily-streak">
+                    <span>Daily Streak: </span>
+                    <span id="dailyStreak">0</span>
+                    <span> days</span>
+                </div>
+            </div>
+
+            <div class="daily-rewards">
+                <h4>Today's Rewards:</h4>
+                <div class="reward-items">
+                    <div class="reward-item">🏆 Double XP</div>
+                    <div class="reward-item">⭐ Streak Bonus</div>
+                    <div class="reward-item">🎁 Special Badge</div>
+                </div>
+            </div>
+
+            <div class="daily-actions">
+                <button class="btn btn-primary" onclick="startDailyQuiz()" id="dailyQuizBtn">Start Daily Quiz</button>
+                <button class="btn btn-secondary" onclick="showStartScreen()">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- <div id="pauseModal" class="modal">
+        <div class="modal-content">
+            <h3>Game Paused</h3>
+            <p>Take your time! The timer is stopped.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="resumeQuiz()">Resume</button>
+                <button class="btn btn-secondary" onclick="quitQuiz()">Quit Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="achievementModal" class="modal">
+        <div class="modal-content achievement-modal">
+            <div class="achievement-icon">🏆</div>
+            <h3>Achievement Unlocked!</h3>
+            <p id="achievementText"></p>
+            <button class="btn btn-primary" onclick="closeAchievementModal()">Awesome!</button>
+        </div>
+    </div> -->
+
+    <div id="confetti"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
