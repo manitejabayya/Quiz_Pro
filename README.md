@@ -4,7 +4,7 @@ An engaging, dynamic, and personalized quiz application built with JavaScript! C
 
 ## 🚀 Live Demo
 
-> 🌐 [Live App Link](https://your-quiz-app-link.com)
+> 🌐 [Live App Link](https://manitejabayya.github.io/Quiz_Pro/)
 
 ## 🧠 Features
 
